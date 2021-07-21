@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y0E-3t-QBw" userLabel="WideAnglePreview" customClass="KYCamPreviewView">
+                                <rect key="frame" x="0.0" y="70" width="414" height="224"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="超广角相机画面" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nze-fG-tXg">
+                                <rect key="frame" x="146" y="299" width="122" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemBlueColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="广角相机画面" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JoO-Da-ri9">
+                                <rect key="frame" x="155" y="44" width="104" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemBlueColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C0G-Ic-Wg5" userLabel="ultraWideAnglePreview" customClass="KYCamPreviewView">
+                                <rect key="frame" x="0.0" y="325" width="414" height="224"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="长焦相机画面" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wwm-zT-TAc" userLabel="长焦相机画面">
+                                <rect key="frame" x="155" y="554" width="104" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" systemColor="systemBlueColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TQ7-Ek-W06" userLabel="telephotoPreview" customClass="KYCamPreviewView">
+                                <rect key="frame" x="0.0" y="580" width="414" height="224"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fti-eK-P1f">
+                                <rect key="frame" x="192" y="822" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="M00-0S-W98"/>
+                                    <constraint firstAttribute="width" constant="30" id="dYh-Xa-x3F"/>
+                                </constraints>
+                                <state key="normal" image="camera" catalog="system"/>
+                                <connections>
+                                    <action selector="actShootPhotoBtnDidClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Cnx-6T-c62"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JoO-Da-ri9" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="0ju-Yf-rZR"/>
+                            <constraint firstItem="Y0E-3t-QBw" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.25" id="2R2-J8-ZdR"/>
+                            <constraint firstItem="C0G-Ic-Wg5" firstAttribute="top" secondItem="Nze-fG-tXg" secondAttribute="bottom" constant="5" id="2z0-MB-2fn"/>
+                            <constraint firstItem="TQ7-Ek-W06" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Dhl-MF-Qc4"/>
+                            <constraint firstItem="Y0E-3t-QBw" firstAttribute="top" secondItem="JoO-Da-ri9" secondAttribute="bottom" constant="5" id="FGL-Z8-sJi"/>
+                            <constraint firstItem="TQ7-Ek-W06" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="FH2-Gm-oom"/>
+                            <constraint firstItem="Y0E-3t-QBw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Hqd-rf-DaZ"/>
+                            <constraint firstItem="wwm-zT-TAc" firstAttribute="top" secondItem="C0G-Ic-Wg5" secondAttribute="bottom" constant="5" id="Ihu-tY-YHp"/>
+                            <constraint firstItem="TQ7-Ek-W06" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.25" id="L1S-nj-cMV"/>
+                            <constraint firstItem="JoO-Da-ri9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="LSc-X6-dAj"/>
+                            <constraint firstAttribute="trailing" secondItem="TQ7-Ek-W06" secondAttribute="trailing" id="SmU-a4-WoI"/>
+                            <constraint firstItem="C0G-Ic-Wg5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Wgo-BT-h3d"/>
+                            <constraint firstItem="C0G-Ic-Wg5" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Wr9-Hw-Wb4"/>
+                            <constraint firstItem="C0G-Ic-Wg5" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.25" id="Yl0-FC-ZiN"/>
+                            <constraint firstItem="Y0E-3t-QBw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="epO-dp-yN3"/>
+                            <constraint firstItem="C0G-Ic-Wg5" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="g7u-Ob-vVX"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Fti-eK-P1f" secondAttribute="bottom" constant="10" id="gki-X8-5hL"/>
+                            <constraint firstItem="Nze-fG-tXg" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kGc-R5-l6m"/>
+                            <constraint firstItem="Nze-fG-tXg" firstAttribute="top" secondItem="Y0E-3t-QBw" secondAttribute="bottom" constant="5" id="lFo-dQ-HA4"/>
+                            <constraint firstItem="TQ7-Ek-W06" firstAttribute="top" secondItem="wwm-zT-TAc" secondAttribute="bottom" constant="5" id="sMn-Mu-4RR"/>
+                            <constraint firstItem="Fti-eK-P1f" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="u8c-fH-4Vr"/>
+                            <constraint firstItem="wwm-zT-TAc" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="uOj-De-E20"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="shootBtn" destination="Fti-eK-P1f" id="HJN-qg-e4V"/>
+                        <outlet property="telephotoPreview" destination="TQ7-Ek-W06" id="zWx-4i-kIk"/>
+                        <outlet property="ultraWideAnglePreview" destination="C0G-Ic-Wg5" id="SK1-H5-Tfx"/>
+                        <outlet property="wideAnglePreview" destination="Y0E-3t-QBw" id="FO5-Ji-lN3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="95.652173913043484" y="93.75"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="camera" catalog="system" width="128" height="94"/>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
