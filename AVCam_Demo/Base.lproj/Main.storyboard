@@ -47,7 +47,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fti-eK-P1f">
-                                <rect key="frame" x="192" y="822" width="30" height="30"/>
+                                <rect key="frame" x="192" y="827" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="M00-0S-W98"/>
                                     <constraint firstAttribute="width" constant="30" id="dYh-Xa-x3F"/>
@@ -77,7 +77,7 @@
                             <constraint firstItem="C0G-Ic-Wg5" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.25" id="Yl0-FC-ZiN"/>
                             <constraint firstItem="Y0E-3t-QBw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="epO-dp-yN3"/>
                             <constraint firstItem="C0G-Ic-Wg5" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="g7u-Ob-vVX"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Fti-eK-P1f" secondAttribute="bottom" constant="10" id="gki-X8-5hL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Fti-eK-P1f" secondAttribute="bottom" constant="5" id="gki-X8-5hL"/>
                             <constraint firstItem="Nze-fG-tXg" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kGc-R5-l6m"/>
                             <constraint firstItem="Nze-fG-tXg" firstAttribute="top" secondItem="Y0E-3t-QBw" secondAttribute="bottom" constant="5" id="lFo-dQ-HA4"/>
                             <constraint firstItem="TQ7-Ek-W06" firstAttribute="top" secondItem="wwm-zT-TAc" secondAttribute="bottom" constant="5" id="sMn-Mu-4RR"/>
