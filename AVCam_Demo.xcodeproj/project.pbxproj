@@ -15,6 +15,7 @@
 		678D14C226A56CC500FBBFD0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 678D14C026A56CC500FBBFD0 /* LaunchScreen.storyboard */; };
 		678D14C526A56CC500FBBFD0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 678D14C426A56CC500FBBFD0 /* main.m */; };
 		678D14CD26A5760000FBBFD0 /* KYCamPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 678D14CC26A5760000FBBFD0 /* KYCamPreviewView.m */; };
+		678D14D026A906FF00FBBFD0 /* Tool.m in Sources */ = {isa = PBXBuildFile; fileRef = 678D14CF26A906FF00FBBFD0 /* Tool.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		678D14C426A56CC500FBBFD0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		678D14CB26A5760000FBBFD0 /* KYCamPreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KYCamPreviewView.h; sourceTree = "<group>"; };
 		678D14CC26A5760000FBBFD0 /* KYCamPreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KYCamPreviewView.m; sourceTree = "<group>"; };
+		678D14CE26A906FF00FBBFD0 /* Tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tool.h; sourceTree = "<group>"; };
+		678D14CF26A906FF00FBBFD0 /* Tool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tool.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 				678D14B226A56CC200FBBFD0 /* AppDelegate.h */,
 				678D14B326A56CC200FBBFD0 /* AppDelegate.m */,
 				678D14B526A56CC200FBBFD0 /* SceneDelegate.h */,
+				678D14CE26A906FF00FBBFD0 /* Tool.h */,
+				678D14CF26A906FF00FBBFD0 /* Tool.m */,
 				678D14B626A56CC200FBBFD0 /* SceneDelegate.m */,
 				678D14B826A56CC200FBBFD0 /* ViewController.h */,
 				678D14B926A56CC200FBBFD0 /* ViewController.m */,
@@ -153,6 +158,7 @@
 				678D14BA26A56CC200FBBFD0 /* ViewController.m in Sources */,
 				678D14B426A56CC200FBBFD0 /* AppDelegate.m in Sources */,
 				678D14C526A56CC500FBBFD0 /* main.m in Sources */,
+				678D14D026A906FF00FBBFD0 /* Tool.m in Sources */,
 				678D14B726A56CC200FBBFD0 /* SceneDelegate.m in Sources */,
 				678D14CD26A5760000FBBFD0 /* KYCamPreviewView.m in Sources */,
 			);
@@ -298,13 +304,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KSKHPCTY7V;
+				DEVELOPMENT_TEAM = KAB7MGJCDD;
 				INFOPLIST_FILE = AVCam_Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "LightMagic.AVCam-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.heygear.AVMultiCam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -316,13 +322,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KSKHPCTY7V;
+				DEVELOPMENT_TEAM = KAB7MGJCDD;
 				INFOPLIST_FILE = AVCam_Demo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "LightMagic.AVCam-Demo";
+				PRODUCT_BUNDLE_IDENTIFIER = com.heygear.AVMultiCam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

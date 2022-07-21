@@ -3,10 +3,11 @@
 //  AVCam_Demo
 //
 //  Created by 李一贤 on 2021/7/19.
-//
+//demo：使用后置的三个摄像头（广角、超广角、长焦）同时独立拍摄图片
 
 #import "ViewController.h"
 #import "KYCamPreviewView.h"
+#import "Tool.h"
 @import AVFoundation;
 @import Photos;
 
@@ -46,12 +47,15 @@
 //后置长焦相机输出对象
 @property (strong,nonatomic) AVCapturePhotoOutput *backTelephotoCameraOutput;
 
-@property (strong,nonatomic) AVCapturePhotoSettings* photoSettings;
-
 //一个串行队列，该队列用于session之间的交流
 @property (nonatomic) dispatch_queue_t sessionQueue;
 
 @property (nonatomic) NSData* photoData;
+
+//currentSettings用于区分每一轮拍照
+@property (strong,nonatomic) AVCapturePhotoSettings* currentSettings;
+
+@property (copy,nonatomic) NSString* currentItemName;
 
 @end
 
@@ -264,6 +268,40 @@
     
 }
 
+-(NSString*)createDocumentName{
+
+    NSDate *date = [NSDate date];
+    NSString *itemName = [Tool dateChangeUTC:date];
+    return itemName;
+}
+
+//-[AVCapturePhotoOutput capturePhotoWithSettings:delegate:]时，
+//都必须使用新的AVCapturePhotoSettings对象
+- (AVCapturePhotoSettings *)fetchNewPhotoSettings{
+    
+    AVCapturePhotoSettings *photoSettings = nil;
+    //当支持拍摄HEIF图片时，设置自动闪光灯以及高质量图片拍摄
+    // Capture HEIF photos when supported, with the flash set to enable auto- and high-resolution photos.
+//    if ([self.backWideAngleCameraOutput.availablePhotoCodecTypes containsObject:AVVideoCodecTypeHEVC]) {
+//        _photoSettings = [AVCapturePhotoSettings photoSettingsWithFormat:@{ AVVideoCodecKey : AVVideoCodecTypeHEVC }];
+//    }
+//    else {
+//        _photoSettings = [AVCapturePhotoSettings photoSettings];
+//    }
+    photoSettings = [AVCapturePhotoSettings photoSettingsWithFormat:@{ AVVideoCodecKey : AVVideoCodecTypeJPEG }];
+    //自动闪光灯
+//    if (self.backWideAngleCameraDeviceInput.device.isFlashAvailable) {
+//        _photoSettings.flashMode = AVCaptureFlashModeAuto;
+//    }
+    photoSettings.highResolutionPhotoEnabled = YES;
+    //设置previewPhotoFormat
+    if (photoSettings.availablePreviewPhotoPixelFormatTypes.count > 0) {
+        photoSettings.previewPhotoFormat = @{ (NSString*)kCVPixelBufferPixelFormatTypeKey : photoSettings.availablePreviewPhotoPixelFormatTypes.firstObject };
+    }
+    photoSettings.photoQualityPrioritization = AVCapturePhotoQualityPrioritizationBalanced;
+    return photoSettings;
+}
+
 #pragma mark - Button Actions -
 - (IBAction)actShootPhotoBtnDidClicked:(id)sender {
     
@@ -278,10 +316,14 @@
             self.telephotoPreview.videoPreviewLayer.opacity = 1.0;
         }];
     });
+    //在session队列里处理拍照采集
     dispatch_async(self.sessionQueue, ^{
-        [self.backWideAngleCameraOutput capturePhotoWithSettings:self.photoSettings delegate:self];
-        [self.backUltraWideAngleCameraOutput capturePhotoWithSettings:self.photoSettings delegate:self];
-        [self.backTelephotoCameraOutput capturePhotoWithSettings:self.photoSettings delegate:self];
+        
+        self.currentSettings = [self fetchNewPhotoSettings];
+        self.currentItemName = [self createDocumentName];
+        [self.backWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
+        [self.backUltraWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
+        [self.backTelephotoCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
     });
     
 }
@@ -307,35 +349,47 @@
         return;
     }
     
+    NSString *path = [NSString stringWithFormat:@"%@",self.currentItemName];
+    path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:path];
+    //若：该文件夹目录不存在
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
+        //创建资源所在的目录
+        [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+    }
     if (self.backUltraWideAngleCameraOutput == captureOutput) {
-        NSLog(@"是后置超广角相机拍摄的图片");
+        NSLog(@"是后置超广角相机拍摄的图片,uniqueID:%lld",resolvedSettings.uniqueID);
+        path = [path stringByAppendingPathComponent:@"3.jpg"];
     }
     
     if (self.backWideAngleCameraOutput == captureOutput) {
-        NSLog(@"是后置广角相机拍摄的图片");
+        NSLog(@"是后置广角相机拍摄的图片,uniqueID:%lld",resolvedSettings.uniqueID);
+        path = [path stringByAppendingPathComponent:@"1.jpg"];
+        
     }
     
     if (self.backTelephotoCameraOutput == captureOutput) {
-        NSLog(@"是后置长焦相机拍摄的图片");
+        NSLog(@"是后置长焦相机拍摄的图片,uniqueID:%lld",resolvedSettings.uniqueID);
+        path = [path stringByAppendingPathComponent:@"2.jpg"];
     }
-    
-    //保存到本地相册
-    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
-        if ( status == PHAuthorizationStatusAuthorized ) {
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                PHAssetCreationRequest* creationRequest = [PHAssetCreationRequest creationRequestForAsset];
-                [creationRequest addResourceWithType:PHAssetResourceTypePhoto data:self.photoData options:nil];
+    [self.photoData writeToFile:path atomically:YES];
 
-            } completionHandler:^( BOOL success, NSError* _Nullable error ) {
-                if ( ! success ) {
-                    NSLog( @"保存图片出错: %@", error );
-                }
-            }];
-        }
-        else {
-            NSLog( @"未授权保存图片的权限");
-        }
-    }];
+    //保存到本地相册
+//    [PHPhotoLibrary requestAuthorization:^( PHAuthorizationStatus status ) {
+//        if ( status == PHAuthorizationStatusAuthorized ) {
+//            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+//                PHAssetCreationRequest* creationRequest = [PHAssetCreationRequest creationRequestForAsset];
+//                [creationRequest addResourceWithType:PHAssetResourceTypePhoto data:self.photoData options:nil];
+//
+//            } completionHandler:^( BOOL success, NSError* _Nullable error ) {
+//                if ( ! success ) {
+//                    NSLog( @"保存图片出错: %@", error );
+//                }
+//            }];
+//        }
+//        else {
+//            NSLog( @"未授权保存图片的权限");
+//        }
+//    }];
 }
 
 #pragma mark - Getter && Setter -
@@ -386,32 +440,6 @@
     }
     return _backTelephotoCameraOutput;
     
-}
-
-//注意：AVCapturePhotoSettings不能用懒加载，因为AVCapturePhotoOutput每次调用
-//-[AVCapturePhotoOutput capturePhotoWithSettings:delegate:]时，
-//都必须使用新的AVCapturePhotoSettings对象
-- (AVCapturePhotoSettings *)photoSettings{
-    
-    //当支持拍摄HEIF图片时，设置自动闪光灯以及高质量图片拍摄
-    // Capture HEIF photos when supported, with the flash set to enable auto- and high-resolution photos.
-    if ([self.backWideAngleCameraOutput.availablePhotoCodecTypes containsObject:AVVideoCodecTypeHEVC]) {
-        _photoSettings = [AVCapturePhotoSettings photoSettingsWithFormat:@{ AVVideoCodecKey : AVVideoCodecTypeHEVC }];
-    }
-    else {
-        _photoSettings = [AVCapturePhotoSettings photoSettings];
-    }
-    //自动闪光灯
-//    if (self.backWideAngleCameraDeviceInput.device.isFlashAvailable) {
-//        _photoSettings.flashMode = AVCaptureFlashModeAuto;
-//    }
-    _photoSettings.highResolutionPhotoEnabled = YES;
-    //设置previewPhotoFormat
-    if (_photoSettings.availablePreviewPhotoPixelFormatTypes.count > 0) {
-        _photoSettings.previewPhotoFormat = @{ (NSString*)kCVPixelBufferPixelFormatTypeKey : _photoSettings.availablePreviewPhotoPixelFormatTypes.firstObject };
-    }
-    _photoSettings.photoQualityPrioritization = AVCapturePhotoQualityPrioritizationBalanced;
-    return _photoSettings;
 }
 
 
