@@ -111,9 +111,9 @@
     //配置广角相机
 //    [self configBackWideAngleCamera];
     //配置超广角相机
-//    [self configUltraWideAngleCamera];
+    [self configUltraWideAngleCamera];
 //    //配置长焦相机
-//    [self configTelephotoCamera];
+    [self configTelephotoCamera];
     //.提交session设置
     [self.session commitConfiguration];
 }
@@ -332,7 +332,7 @@
     dispatch_async(self.sessionQueue, ^{
         
         self.currentItemName = [self createDocumentName];
-        [self.backWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
+//        [self.backWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
         [self.backUltraWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
         [self.backTelephotoCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
     });
@@ -423,9 +423,13 @@
     //        [_backWideAngleCamera setExposureMode:AVCaptureExposureModeLocked];
             //设置对焦锁定
     //        _backWideAngleCamera.focusMode = AVCaptureFocusModeLocked;
-            [_backWideAngleCamera setExposureModeCustomWithDuration:_backWideAngleCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
-                        
-            }];
+//            if ([_backWideAngleCamera isExposureModeSupported:AVCaptureExposureModeCustom]) {
+//                [_backWideAngleCamera setExposureMode:AVCaptureExposureModeCustom];
+//                [_backWideAngleCamera setExposureModeCustomWithDuration:_backWideAngleCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+//
+//                }];
+//            }
+            
             [_backWideAngleCamera unlockForConfiguration];
         }
     }
@@ -437,9 +441,16 @@
     if (!_backUltraWideAngleCamera) {
         _backUltraWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInUltraWideCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
         if ([_backUltraWideAngleCamera lockForConfiguration:nil]) {
-            [_backUltraWideAngleCamera setExposureModeCustomWithDuration:_backUltraWideAngleCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
-                            
-            }];
+            if ([_backUltraWideAngleCamera isExposureModeSupported:AVCaptureExposureModeCustom]) {
+                [_backUltraWideAngleCamera setExposureMode:AVCaptureExposureModeCustom];
+                CGFloat minISO = _backUltraWideAngleCamera.activeFormat.minISO;
+                CGFloat maxISO = _backUltraWideAngleCamera.activeFormat.maxISO;
+                CGFloat currentISO = (maxISO - minISO) * 0.7 + minISO;
+                [_backUltraWideAngleCamera setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+                                
+                }];
+            }
+            
             [_backUltraWideAngleCamera unlockForConfiguration];
         }
         
@@ -451,10 +462,14 @@
     
     if (!_backTelephotoCamera) {
         _backTelephotoCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInTelephotoCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
-        if (_backTelephotoCamera) {
-            [_backTelephotoCamera setExposureModeCustomWithDuration:_backTelephotoCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
-                            
-            }];
+        if ([_backTelephotoCamera lockForConfiguration:nil]) {
+            if ([_backTelephotoCamera isExposureModeSupported:AVCaptureExposureModeCustom]) {
+                [_backTelephotoCamera setExposureMode:AVCaptureExposureModeCustom];
+                [_backTelephotoCamera setExposureModeCustomWithDuration:AVCaptureExposureDurationCurrent ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+                                
+                }];
+            }
+            [_backTelephotoCamera unlockForConfiguration];
         }
     }
     return _backTelephotoCamera;
