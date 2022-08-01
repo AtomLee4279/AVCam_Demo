@@ -29,6 +29,15 @@
 
 @property (strong,nonatomic) AVCaptureMultiCamSession *session;
 
+//后置广角相机
+@property (strong, nonatomic) AVCaptureDevice* backWideAngleCamera;
+
+//后置超广角相机
+@property (strong, nonatomic) AVCaptureDevice* backUltraWideAngleCamera;
+
+//后置长焦相机
+@property (strong, nonatomic) AVCaptureDevice* backTelephotoCamera;
+
 //后置广角相机输入对象
 @property (strong,nonatomic) AVCaptureDeviceInput *backWideAngleCameraDeviceInput;
 
@@ -75,7 +84,9 @@
     //设置预览长焦相机画面layer
     [self.telephotoPreview.videoPreviewLayer setSessionWithNoConnection:self.session];
     self.telephotoPreviewLayer = self.telephotoPreview.videoPreviewLayer;
-    
+    dispatch_async(self.sessionQueue, ^{
+        self.currentSettings = [self fetchNewPhotoSettings];
+    });
     dispatch_async(self.sessionQueue, ^{
         [self configSession];
     });
@@ -98,11 +109,11 @@
     [self.session beginConfiguration];
     
     //配置广角相机
-    [self configBackWideAngleCamera];
+//    [self configBackWideAngleCamera];
     //配置超广角相机
-    [self configUltraWideAngleCamera];
-    //配置长焦相机
-    [self configTelephotoCamera];
+//    [self configUltraWideAngleCamera];
+//    //配置长焦相机
+//    [self configTelephotoCamera];
     //.提交session设置
     [self.session commitConfiguration];
 }
@@ -111,7 +122,7 @@
 -(BOOL)configBackWideAngleCamera{
     
     //1.获取后置广角相机设备
-    AVCaptureDevice* backWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInWideAngleCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice* backWideAngleCamera = self.backWideAngleCamera;
     if (!backWideAngleCamera) {
         NSLog(@"无法找到后置广角相机");
         return NO;
@@ -164,7 +175,7 @@
 -(BOOL)configUltraWideAngleCamera{
     
     //1.获取后置超广角相机设备
-    AVCaptureDevice* backUltraWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInUltraWideCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice* backUltraWideAngleCamera = self.backUltraWideAngleCamera;
     if (!backUltraWideAngleCamera) {
         NSLog(@"无法找到后置超广角相机");
         return NO;
@@ -218,7 +229,7 @@
 -(BOOL)configTelephotoCamera{
     
     //1.获取后置长焦相机设备
-    AVCaptureDevice* backTelephotoCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInTelephotoCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    AVCaptureDevice* backTelephotoCamera = self.backTelephotoCamera;
     if (!backTelephotoCamera) {
         NSLog(@"无法找到后置长焦相机");
         return NO;
@@ -299,6 +310,7 @@
         photoSettings.previewPhotoFormat = @{ (NSString*)kCVPixelBufferPixelFormatTypeKey : photoSettings.availablePreviewPhotoPixelFormatTypes.firstObject };
     }
     photoSettings.photoQualityPrioritization = AVCapturePhotoQualityPrioritizationBalanced;
+    photoSettings.cameraCalibrationDataDeliveryEnabled = self.backWideAngleCameraOutput.cameraCalibrationDataDeliverySupported;
     return photoSettings;
 }
 
@@ -319,7 +331,6 @@
     //在session队列里处理拍照采集
     dispatch_async(self.sessionQueue, ^{
         
-        self.currentSettings = [self fetchNewPhotoSettings];
         self.currentItemName = [self createDocumentName];
         [self.backWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
         [self.backUltraWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
@@ -334,6 +345,7 @@
     
     //缓存拍照处理完成后的图片数据
     self.photoData = [photo fileDataRepresentation];
+    photo.cameraCalibrationData.intrinsicMatrix;
 }
 
 - (void) captureOutput:(AVCapturePhotoOutput*)captureOutput didFinishCaptureForResolvedSettings:(AVCaptureResolvedPhotoSettings*)resolvedSettings error:(NSError*)error
@@ -402,6 +414,29 @@
     return _session;
 }
 
+- (AVCaptureDevice *)backWideAngleCamera{
+    
+    if (!_backWideAngleCamera) {
+        _backWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInDualCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    }
+    return _backWideAngleCamera;
+}
+
+- (AVCaptureDevice *)backUltraWideAngleCamera{
+    
+    if (!_backUltraWideAngleCamera) {
+        _backUltraWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInUltraWideCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    }
+    return  _backUltraWideAngleCamera;
+}
+
+- (AVCaptureDevice *)backTelephotoCamera{
+    
+    if (!_backTelephotoCamera) {
+        _backTelephotoCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInTelephotoCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+    }
+    return _backTelephotoCamera;
+}
 
 -(dispatch_queue_t)sessionQueue{
     
