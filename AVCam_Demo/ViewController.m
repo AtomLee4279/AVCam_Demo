@@ -85,9 +85,6 @@
     [self.telephotoPreview.videoPreviewLayer setSessionWithNoConnection:self.session];
     self.telephotoPreviewLayer = self.telephotoPreview.videoPreviewLayer;
     dispatch_async(self.sessionQueue, ^{
-        self.currentSettings = [self fetchNewPhotoSettings];
-    });
-    dispatch_async(self.sessionQueue, ^{
         [self configSession];
     });
 }
@@ -330,7 +327,7 @@
     });
     //在session队列里处理拍照采集
     dispatch_async(self.sessionQueue, ^{
-        
+        self.currentSettings = [self fetchNewPhotoSettings];
         self.currentItemName = [self createDocumentName];
 //        [self.backWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
         [self.backUltraWideAngleCameraOutput capturePhotoWithSettings:self.currentSettings delegate:self];
