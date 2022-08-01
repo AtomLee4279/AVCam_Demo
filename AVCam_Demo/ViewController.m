@@ -418,6 +418,16 @@
     
     if (!_backWideAngleCamera) {
         _backWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInDualCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+        if ([_backWideAngleCamera lockForConfiguration:nil]) {
+            //设置曝光锁定
+    //        [_backWideAngleCamera setExposureMode:AVCaptureExposureModeLocked];
+            //设置对焦锁定
+    //        _backWideAngleCamera.focusMode = AVCaptureFocusModeLocked;
+            [_backWideAngleCamera setExposureModeCustomWithDuration:_backWideAngleCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+                        
+            }];
+            [_backWideAngleCamera unlockForConfiguration];
+        }
     }
     return _backWideAngleCamera;
 }
@@ -426,6 +436,13 @@
     
     if (!_backUltraWideAngleCamera) {
         _backUltraWideAngleCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInUltraWideCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+        if ([_backUltraWideAngleCamera lockForConfiguration:nil]) {
+            [_backUltraWideAngleCamera setExposureModeCustomWithDuration:_backUltraWideAngleCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+                            
+            }];
+            [_backUltraWideAngleCamera unlockForConfiguration];
+        }
+        
     }
     return  _backUltraWideAngleCamera;
 }
@@ -434,6 +451,11 @@
     
     if (!_backTelephotoCamera) {
         _backTelephotoCamera = [AVCaptureDevice defaultDeviceWithDeviceType:AVCaptureDeviceTypeBuiltInTelephotoCamera mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionBack];
+        if (_backTelephotoCamera) {
+            [_backTelephotoCamera setExposureModeCustomWithDuration:_backTelephotoCamera.exposureDuration ISO:AVCaptureISOCurrent completionHandler:^(CMTime syncTime) {
+                            
+            }];
+        }
     }
     return _backTelephotoCamera;
 }
